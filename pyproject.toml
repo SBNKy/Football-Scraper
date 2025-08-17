@@ -1,0 +1,7 @@
+[project]
+name = "footballscraper"
+version = "0.1.0"
+description = "Application to scrape football data from top 5 leagues in Europe"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
