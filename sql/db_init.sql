@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS players;
+DROP TABLE IF EXISTS teams;
+
+CREATE TABLE teams (
+    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    content TEXT
+);
+
+CREATE TABLE players (
+    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    team_id INT REFERENCES teams(id),
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL
+);
+
+
