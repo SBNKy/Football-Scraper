@@ -1,9 +1,9 @@
-import json
-
-import requests
+import pandas as pd
 from bs4 import BeautifulSoup
+from cloudscraper import create_scraper
+from six import StringIO
 
-URLS = {
+LEAGUE_URLS = {
     "Premier League": "https://fbref.com/en/comps/9/Premier-League-Stats",
     "La Liga": "https://fbref.com/en/comps/12/La-Liga-Stats",
     "Bundesliga": "https://fbref.com/en/comps/20/Bundesliga-Stats",
@@ -12,16 +12,21 @@ URLS = {
 }
 
 def scrape_league_data() -> None:
-    pass
+    scraper = create_scraper()
+    response = scraper.get("https://fbref.com/en/comps/9/Premier-League-Stats").text
+    df = pd.read_html(StringIO(response), attrs={"id": "results2025-202691_overall"})[0]
+
+    # soup = BeautifulSoup(response, features="lxml")
+    # table = soup.find_all("table")
+    print(df.head())
+
+
 
 
 def main() -> None:
-    for league, url in URLS.items():
-        print(league, url)
-    response = requests.get(URLS.get("Premier League"), 'html.parser')
-    print(response.status_code)
-    print(response.text)
-    # print(json.dumps(response.json(), indent=4))
+    scrape_league_data()
+
+
 
 if __name__ == '__main__':
     main()
