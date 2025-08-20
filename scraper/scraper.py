@@ -1,3 +1,5 @@
+import os
+import time
 from io import StringIO
 
 import pandas as pd
@@ -21,19 +23,22 @@ def scrape_league_data() -> DataFrame:
     df_list = []
     scraper = create_scraper()
 
-    for league_url, data in LEAGUE_URLS.items():
+    for league, data in LEAGUE_URLS.items():
         response = scraper.get(data["url"]).text
-        df = pd.read_html(StringIO(response), attrs={"id": data["attribute_id"]})[0]
+        print(response)
+        df = pd.read_html(StringIO(response), attrs={"id": data["attribute_id"]}, flavor="lxml")[0]
+        df.insert(0, "Competition name", league)
         if "Last 5" not in df.columns:
             df.insert(15, "Last 5", pd.NA)
 
         df_list.append(df)
 
+        time.sleep(5)
 
-    return df_list
-    # print(df["Top Team Scorer"])
+    combined_df = pd.concat(df_list)
+    combined_df.to_csv("../data/data.csv")
 
-
+    return combined_df
 
 
 def main() -> None:
