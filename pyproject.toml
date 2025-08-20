@@ -5,6 +5,7 @@ description = "Application to scrape football data from top 5 leagues in Europe"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "bs4>=0.0.2",
     "lxml>=6.0.0",
     "psycopg>=3.2.9",
 ]
