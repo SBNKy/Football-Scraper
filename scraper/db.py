@@ -41,17 +41,18 @@ def test_connection() -> bool:
 
             return True
 
-def read_csv(path="../data/data.csv"):
+def read_csv(path="../data/data.csv") -> None:
     df = pd.read_csv(path)
-    tuples = [tuple(row) for row in df.to_numpy()]
-    print(tuples[0])
+    rows = [tuple(row) for row in df.to_numpy()]
     cols = ','.join(list(df.columns))
     print(cols)
+    placeholders = ",".join(["%s"] * len(df.columns))
     with psycopg.connect(host=DB_HOST, dbname=DB_NAME, user=DB_USERNAME, password=DB_PASSWORD, port=DB_PORT) as conn:
         with conn.cursor() as curr:
-            pass
-            curr.execute("INSERT INTO ")
+            query = f"INSERT INTO teams ({cols}) VALUES ({placeholders})"
+            curr.executemany(query, rows)
 
+        conn.commit()
 
 def main() -> None:
     test_connection()

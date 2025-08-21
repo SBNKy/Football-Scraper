@@ -1,4 +1,4 @@
-competition name,position,team_name,matches_played,wins,draws,losses,goals_scored,goals_conceded,points,expected_goals,expected_goals_diff,expected_goals_diff_90_min,last_5,attendance,top_team_scorer
+competition_name,position,team_name,matches_played,wins,draws,losses,goals_scored,goals_conceded,points,expected_goals,expected_goals_conceded,expected_goals_diff_90_min,last_5,attendance,top_team_scorer
 Premier League,1,Manchester City,1,1,0,0,4,0,3,2.4,0.6,1.85,W,0.0,Erling Haaland - 2
 Premier League,2,Sunderland,1,1,0,0,3,0,3,0.7,0.6,0.18,W,46233.0,"Daniel Ballard, Wilson Isidor... - 1"
 Premier League,3,Tottenham,1,1,0,0,3,0,3,2.3,0.9,1.39,W,61077.0,Richarlison - 2

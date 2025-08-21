@@ -26,7 +26,7 @@ def scrape_league_data() -> None:
         response = scraper.get(data["url"]).text
 
         df = pd.read_html(StringIO(response), attrs={"id": data["attribute_id"]}, flavor="lxml")[0]
-        df.insert(0, "competition name", league)
+        df.insert(0, "competition_name", league)
         if "Last 5" not in df.columns:
             df.insert(15, "Last 5", pd.NA)
 
@@ -56,7 +56,7 @@ def rename_df_cols(df: DataFrame) -> DataFrame:
         "GA": "goals_conceded",
         "Pts": "points",
         "xG": "expected_goals",
-        "xGA": "expected_goals_diff",
+        "xGA": "expected_goals_conceded",
         "xGD/90": "expected_goals_diff_90_min",
         "Last 5": "last_5",
         "Attendance": "attendance",
