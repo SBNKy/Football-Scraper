@@ -1,4 +1,3 @@
-import os
 import time
 from io import StringIO
 
@@ -19,26 +18,49 @@ LEAGUE_URLS = {
                 "attribute_id": "results2025-2026131_overall"}
 }
 
-def scrape_league_data() -> DataFrame:
+def scrape_league_data() -> None:
     df_list = []
     scraper = create_scraper()
-
     for league, data in LEAGUE_URLS.items():
         response = scraper.get(data["url"]).text
-        print(response)
+
         df = pd.read_html(StringIO(response), attrs={"id": data["attribute_id"]}, flavor="lxml")[0]
-        df.insert(0, "Competition name", league)
+        df.insert(0, "competition name", league)
         if "Last 5" not in df.columns:
             df.insert(15, "Last 5", pd.NA)
 
         df_list.append(df)
 
+        # delay next request to avoid falling into request rate problem
         time.sleep(5)
 
     combined_df = pd.concat(df_list)
+    # Drop columns that will be calculated by the DB (except Pts/MP, Goalkeeper and Notes)
+    combined_df.drop(["GD", "xGD", "Pts/MP", "Goalkeeper", "Notes"], axis=1)
+    combined_df = rename_df_cols(combined_df)
     combined_df.to_csv("../data/data.csv")
 
-    return combined_df
+def rename_df_cols(df: DataFrame) -> DataFrame:
+    # rename dataframe cols to match DB cols
+    df = df.rename(columns={
+        "Rk": "position",
+        "Squad": "team_name",
+        "MP": "matches_played",
+        "W": "wins",
+        "D": "draws",
+        "L": "losses",
+        "GF": "goals_scored",
+        "GA": "goals_conceded",
+        "Pts": "points",
+        "xG": "expected_goals",
+        "xGA": "expected_goals_diff",
+        "xGD/90": "expected_goals_diff_90_min",
+        "Last 5": "last_5",
+        "Attendance": "attendance",
+        "Top Team Scorer": "top_team_scorer"
+    })
+
+    return df
 
 
 def main() -> None:

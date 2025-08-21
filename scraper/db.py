@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 import psycopg
+import pandas as pd
 
 load_dotenv()
 
@@ -40,9 +41,19 @@ def test_connection() -> bool:
 
             return True
 
+def read_csv(path="../data/data.csv"):
+    df = pd.read_csv(path)
+    cols = ','.join(list(df.columns))
+    print(cols)
+    with psycopg.connect(host=DB_HOST, dbname=DB_NAME, user=DB_USERNAME, password=DB_PASSWORD, port=DB_PORT) as conn:
+        with conn.cursor() as curr:
+            pass
+            curr.execute("INSERT INTO ")
+
 
 def main() -> None:
     test_connection()
+    read_csv()
 
 
 if __name__ == '__main__':

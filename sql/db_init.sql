@@ -17,7 +17,10 @@ CREATE TABLE teams (
     expected_goals NUMERIC(3, 2) NOT NULL,
     expected_goals_conceded NUMERIC(3, 2) NOT NULL,
     expected_goals_diff NUMERIC(3, 2) GENERATED ALWAYS AS (expected_goals - expected_goals_conceded) STORED,
-    expected_goals_diff_90_min NUMERIC(3, 2) NOT NULL
+    expected_goals_diff_90_min NUMERIC(3, 2) NOT NULL,
+    last_5 VARCHAR(20) NOT NULL,
+    top_team_scorer VARCHAR(100) NOT NULL,
+    attendance INT NOT NULL
 );
 
 CREATE TABLE players (
