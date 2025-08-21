@@ -4,6 +4,7 @@ from io import StringIO
 import pandas as pd
 from cloudscraper import create_scraper
 from pandas import DataFrame
+from sqlalchemy import false
 
 LEAGUE_URLS = {
     "Premier League": {"url": "https://fbref.com/en/comps/9/Premier-League-Stats",
@@ -36,9 +37,11 @@ def scrape_league_data() -> None:
 
     combined_df = pd.concat(df_list)
     # Drop columns that will be calculated by the DB (except Pts/MP, Goalkeeper and Notes)
-    combined_df.drop(["GD", "xGD", "Pts/MP", "Goalkeeper", "Notes"], axis=1)
+    combined_df.drop(["GD", "xGD", "Pts/MP", "Goalkeeper", "Notes"], axis=1, inplace=True)
     combined_df = rename_df_cols(combined_df)
-    combined_df.to_csv("../data/data.csv")
+    combined_df.fillna(0, inplace=True)
+
+    combined_df.to_csv("../data/data.csv", index=False, mode="w")
 
 def rename_df_cols(df: DataFrame) -> DataFrame:
     # rename dataframe cols to match DB cols

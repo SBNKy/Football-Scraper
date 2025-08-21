@@ -43,6 +43,8 @@ def test_connection() -> bool:
 
 def read_csv(path="../data/data.csv"):
     df = pd.read_csv(path)
+    tuples = [tuple(row) for row in df.to_numpy()]
+    print(tuples[0])
     cols = ','.join(list(df.columns))
     print(cols)
     with psycopg.connect(host=DB_HOST, dbname=DB_NAME, user=DB_USERNAME, password=DB_PASSWORD, port=DB_PORT) as conn:
