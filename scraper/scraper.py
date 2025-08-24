@@ -4,7 +4,6 @@ from io import StringIO
 import pandas as pd
 from cloudscraper import create_scraper
 from pandas import DataFrame
-from sqlalchemy import false
 
 LEAGUE_URLS = {
     "Premier League": {"url": "https://fbref.com/en/comps/9/Premier-League-Stats",
@@ -19,7 +18,7 @@ LEAGUE_URLS = {
                 "attribute_id": "results2025-2026131_overall"}
 }
 
-def scrape_league_data() -> None:
+def scrape_league_data(path="../data/data.csv") -> None:
     df_list = []
     scraper = create_scraper()
     for league, data in LEAGUE_URLS.items():
@@ -38,12 +37,12 @@ def scrape_league_data() -> None:
     combined_df = pd.concat(df_list)
     # Drop columns that will be calculated by the DB (except Pts/MP, Goalkeeper and Notes)
     combined_df.drop(["GD", "xGD", "Pts/MP", "Goalkeeper", "Notes"], axis=1, inplace=True)
-    combined_df = rename_df_cols(combined_df)
+    combined_df = _rename_df_cols(combined_df)
     combined_df.fillna(0, inplace=True)
 
-    combined_df.to_csv("../data/data.csv", index=False, mode="w")
+    combined_df.to_csv(path, index=False, mode="w")
 
-def rename_df_cols(df: DataFrame) -> DataFrame:
+def _rename_df_cols(df: DataFrame) -> DataFrame:
     # rename dataframe cols to match DB cols
     df = df.rename(columns={
         "Rk": "position",
